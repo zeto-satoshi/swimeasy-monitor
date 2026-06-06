@@ -123,7 +123,7 @@ immediately, and alerts if the process dies. Stop with Ctrl+C.
 | `run_check()` | Calls `check_slot()`, logs result, fires Telegram if open |
 | `send_telegram()` | Posts alert via Bot API; no-ops if token not configured |
 | `POLL_INTERVAL_MIN` | Default 5 min; adjust at top of script |
-| `MAX_RUNTIME_HOURS` | Default 120 h (5 days); script self-stops after that |
+| `MAX_RUNTIME_HOURS` | 168 h (7 days); script self-stops after that |
 
 ## Page Behavior Notes
 
@@ -131,7 +131,7 @@ immediately, and alerts if the process dies. Stop with Ctrl+C.
 - Clicking "13" in the Sat column loads "Availability for Saturday, June 13"
 - The 4pm slot shows `"Waitlist"` below the time when full
 - Right panel shows `"Join Waitlist"` when full; `"Next"` when open
-- The "13" cell is at roughly x=624 in the calendar grid (Sat column, rightmost)
+- The "13" cell is at roughly x=460 in the calendar grid (Sat column, rightmost)
 - If `not_found` fires repeatedly: navigate with the `>` arrow to June 2026 first
 
 ---
