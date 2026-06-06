@@ -25,7 +25,7 @@ I am a native Mandarin speaker. Explanations and plans can be in Chinese.
 Code, variable names, and file content stay in English.
 
 **Rule 02 — Start every reply with my name**
-Begin each response with "Zhi，" — this helps me track context window health.
+Begin each response with "Zhi, " — this helps me track context window health.
 
 ---
 
@@ -111,8 +111,8 @@ python swimeasy_monitor.py
 
 ## Timezone Reference
 
-- my partner is in **Amsterdam (CEST, UTC+2)**
-- Zhi is in **Michigan (EDT, UTC−4)**
+- Target location is **Amsterdam (CEST, UTC+2)**
+- My timezone is **Michigan (EDT, UTC−4)**
 - Telegram alert already shows both timezones
 
 ---
