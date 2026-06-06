@@ -113,10 +113,13 @@ playwright install chromium
 cp .env.example .env        # fill in TELEGRAM_TOKEN and TELEGRAM_CHAT_ID
 
 # Verify everything works (expect "waitlist")
-python swimeasy_monitor.py --check   # or use /dryrun in Claude Code
+.venv/bin/python swimeasy_monitor.py --check   # or use /dryrun in Claude Code
 
-# Start 7-day continuous monitor
+# Start 7-day continuous monitor (macOS — caffeinate prevents system sleep)
 nohup caffeinate -i .venv/bin/python swimeasy_monitor.py >> swimeasy_monitor.log 2>&1 &
+
+# On Linux — caffeinate doesn't exist, nohup alone is sufficient
+# nohup .venv/bin/python swimeasy_monitor.py >> swimeasy_monitor.log 2>&1 &
 
 # Check it's alive
 pgrep -f swimeasy_monitor.py

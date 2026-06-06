@@ -196,14 +196,21 @@ def run_check():
 
 
 if __name__ == "__main__":
+    import sys
+
+    check_only = "--check" in sys.argv
+
+    # Only mirror to stdout when running interactively — avoids duplicate log
+    # lines when nohup redirects stdout into the same file as FileHandler
+    handlers: list[logging.Handler] = [logging.FileHandler("swimeasy_monitor.log")]
+    if sys.stdout.isatty():
+        handlers.append(logging.StreamHandler())
+
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s  %(message)s",
         datefmt="%H:%M:%S",
-        handlers=[
-            logging.StreamHandler(),
-            logging.FileHandler("swimeasy_monitor.log"),
-        ],
+        handlers=handlers,
     )
 
     logging.info("=" * 55)
@@ -212,6 +219,12 @@ if __name__ == "__main__":
     logging.info(f"Platform: Wix Bookings (Playwright)")
     logging.info(f"Interval: every {POLL_INTERVAL_MIN} min")
     logging.info("=" * 55)
+
+    if check_only:
+        result = check_slot()
+        logging.info(f"  --check result: {result}")
+        print(result)
+        sys.exit(0)
 
     run_check()
     schedule.every(POLL_INTERVAL_MIN).minutes.do(run_check)
