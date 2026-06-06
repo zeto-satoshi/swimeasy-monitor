@@ -79,12 +79,30 @@ swimeasy-monitor/
 pip install playwright schedule python-dotenv requests
 playwright install chromium
 
-# Dry run (single check)
-python swimeasy_monitor.py
-
 # Continuous monitoring (logs to swimeasy_monitor.log)
-python swimeasy_monitor.py
+nohup .venv/bin/python swimeasy_monitor.py >> swimeasy_monitor.log 2>&1 &
 ```
+
+## Claude Code Slash Commands
+
+| Command | What it does |
+|---------|-------------|
+| `/dryrun` | Single check — returns `"waitlist"`, `"open"`, `"not_found"`, or error |
+| `/start` | Launch monitor in background, confirm first check is clean |
+| `/status` | Is it running? Last log lines? Time left until June 13? |
+| `/commit` | Safe commit (never stages `.env` or logs) |
+| `/review` | Code quality + selector/error-handling audit |
+
+## Agentic Monitoring Pattern
+
+To have Claude Code watch the script autonomously every 5 minutes:
+
+```
+/loop 5m /dryrun
+```
+
+Claude polls `check_slot()` on interval, surfaces any `"not_found"` or errors
+immediately, and alerts if the process dies. Stop with Ctrl+C.
 
 ---
 
