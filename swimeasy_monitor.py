@@ -89,39 +89,42 @@ def check_slot() -> str | None:
             browser = p.chromium.launch(headless=True)
             page = browser.new_page(viewport={"width": 1280, "height": 900})
 
-            # Go to booking page
-            page.goto(BOOKING_URL, wait_until="networkidle", timeout=40000)
-            page.wait_for_timeout(2000)
+            # Go to booking page — domcontentloaded avoids waiting on Wix's
+            # perpetual background XHR traffic that blocks networkidle
+            page.goto(BOOKING_URL, wait_until="domcontentloaded", timeout=60000)
+
+            # Wait for the calendar grid to render before touching anything
+            page.wait_for_selector("text='13'", timeout=30000)
 
             # ── Click June 13 ──
-            # Calendar cells are text nodes; find "13" in the Sat column
-            # The page shows "June 2026" so we look for the cell containing "13"
-            # We use a more robust locator:
+            # Sat column x is ~460 in a 1280-wide viewport; pick the rightmost
+            # "13" cell in case other elements also contain that digit
             date_cell = None
             all_cells = page.locator("text='13'").all()
+            rightmost_x = -1
             for cell in all_cells:
-                # Check if this is the calendar cell (not some other "13")
                 bbox = cell.bounding_box()
-                if bbox and bbox["x"] > 550:   # Sat column is on the right side
+                if bbox and bbox["x"] > rightmost_x:
+                    rightmost_x = bbox["x"]
                     date_cell = cell
-                    break
 
             if not date_cell:
-                # Try any cell labeled 13
                 date_cell = page.locator("text='13'").first
 
             date_cell.click()
-            page.wait_for_timeout(2500)
+            # Wait for the header, then the slot buttons (they render separately)
+            page.wait_for_selector("text=/June 13/", timeout=10000)
+            page.wait_for_selector(f"text=/{TARGET_TIME_TEXT}/", timeout=10000)
 
             # ── Check availability area ──
-            avail_area = page.locator("text='June 13'")
+            avail_area = page.locator("text=/June 13/")
             if avail_area.count() == 0:
                 logging.warning("June 13 availability section not found after click")
                 browser.close()
                 return "not_found"
 
             # ── Find the 4:00 pm slot ──
-            slot = page.locator(f"text='{TARGET_TIME_TEXT}'")
+            slot = page.locator(f"text=/{TARGET_TIME_TEXT}/")
             if slot.count() == 0:
                 logging.warning(f"'{TARGET_TIME_TEXT}' slot not visible on June 13")
                 browser.close()
