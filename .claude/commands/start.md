@@ -1,4 +1,5 @@
 Launch the SwimEasy monitor in the background and tail the log.
+Prevents macOS system sleep for the full duration via caffeinate.
 
 Steps:
 1. Check if the script is already running:
@@ -9,8 +10,8 @@ Steps:
    `grep -c "YOUR_BOT_TOKEN_HERE" .env` should return 0.
    If placeholders are found, warn and stop.
 
-3. Launch in background:
-   `nohup .venv/bin/python swimeasy_monitor.py >> swimeasy_monitor.log 2>&1 &`
+3. Launch in background with sleep prevention:
+   `nohup caffeinate -i .venv/bin/python swimeasy_monitor.py >> swimeasy_monitor.log 2>&1 &`
    Report the PID.
 
 4. Tail the log for 15 seconds to confirm it started cleanly:

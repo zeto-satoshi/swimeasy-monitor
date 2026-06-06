@@ -79,8 +79,17 @@ swimeasy-monitor/
 pip install playwright schedule python-dotenv requests
 playwright install chromium
 
-# Continuous monitoring (logs to swimeasy_monitor.log)
-nohup .venv/bin/python swimeasy_monitor.py >> swimeasy_monitor.log 2>&1 &
+# Start monitor (7-day run, prevents macOS sleep)
+nohup caffeinate -i .venv/bin/python swimeasy_monitor.py >> swimeasy_monitor.log 2>&1 &
+
+# Check it's alive
+pgrep -f swimeasy_monitor.py
+
+# Watch the log live
+tail -f swimeasy_monitor.log
+
+# Stop it manually
+pkill -f swimeasy_monitor.py
 ```
 
 ## Claude Code Slash Commands

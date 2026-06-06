@@ -45,7 +45,7 @@ BOOKING_URL = (
 TARGET_DATE_TEXT = "June 13"      # text shown on calendar
 TARGET_TIME_TEXT = "4:00 pm"      # text on the slot button
 POLL_INTERVAL_MIN = 5
-MAX_RUNTIME_HOURS = 120           # 5 days
+MAX_RUNTIME_HOURS = 168           # 7 days — covers Jun 6 → Jun 13
 
 # ─────────────────────────────────────────────
 # NOTIFICATION
